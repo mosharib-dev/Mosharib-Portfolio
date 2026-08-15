@@ -1,12 +1,25 @@
-# Mohammad Mosharib — Portfolio (Full-Stack)
+# Mohammad Mosharib — Portfolio
 
-A multi-page developer portfolio built with **React (Vite) + Express + MongoDB**.
-Design direction: an "engineering console" aesthetic — graphite-navy background,
-amber/teal signal accents, HUD corner-bracket panels, and a live diagnostic-style
-status bar — built to echo the dashboards you've actually shipped (BankEase,
-InterviewAI) instead of a generic template.
+A full-stack developer portfolio built with **React (Vite) + Express + MongoDB**.
 
-## Structure
+The design direction is an "engineering console" aesthetic — graphite-navy
+background, amber/teal signal accents, HUD corner-bracket panels, and a live
+diagnostic-style status bar — built to echo the role-based dashboards this
+portfolio is actually showcasing (BankEase, InterviewAI) rather than a
+generic template.
+
+---
+
+## Tech stack
+
+| Layer      | Stack                                                             |
+| ---------- | ------------------------------------------------------------------ |
+| Frontend   | React 19, Vite, React Router 7, Tailwind CSS, Axios                |
+| Backend    | Node.js, Express 5, Mongoose                                       |
+| Database   | MongoDB (Atlas in production)                                      |
+| Integrations | GitHub API (live repo feed), Nodemailer (contact form), Microlink (auto screenshots) |
+
+## Project structure
 
 ```
 portfolio/
@@ -16,28 +29,51 @@ portfolio/
 
 ## Pages
 
-Home · About · Projects (+ project detail) · Skills · Blog (+ post detail) ·
-Resume · Contact.
+Home · About · Projects (+ project detail) · Skills · Blog (+ post detail) · Resume · Contact
 
-**Projects page is three tiers:**
-1. **Flagship builds** — InterviewAI (real repo: `AI-Interview-Preparation`) and BankEase (real repo: `BankEase---Multi-Role-Bank-Management-System`), large "★ Featured" cards with full write-ups
-2. **Verified project write-ups** — 6 more of your real repos (WanderLust, WeatherOS, Connect Four AI, E-Commerce Layout, Calculator, Authentication System), hardcoded with real descriptions/features/stacks pulled from each repo directly — except **Authentication System**, where GitHub blocked automated access to the README, so that one's description is inferred from the repo name only. Replace it with the real feature list in `backend/seed.js` when you can.
-3. **Everything else** — any remaining public repos, pulled live via the GitHub API
+**Home** leads with a boot-sequence hero, a live status bar (CGPA, DSA problems
+solved, and a project count pulled straight from the API so it never goes
+stale), a scrolling tech-stack strip generated from the real skills data, and
+the two featured builds.
 
-GitHub blocks automated browsing of a user's full repository list page, so repos outside the 8 above can only be enumerated through the live API at runtime — they can't be hardcoded ahead of time. Send more repo URLs any time and I'll add them to tier 2 with the same real-data treatment.
+**Projects** is three tiers:
 
-**Preview images**, for both the featured cards and every repo card, resolve in this order:
-1. An explicit `image` you set on a curated project (best quality — see below)
-2. If the project/repo has a live deploy link, an auto screenshot of that site (via microlink.io, no key required)
-3. Otherwise, GitHub's own auto-generated social preview card for the repo
+1. **Flagship builds** — InterviewAI (`AI-Interview-Preparation`) and BankEase
+   (`BankEase---Multi-Role-Bank-Management-System`), large "★ Featured" cards
+   with full write-ups.
+2. **Verified project write-ups** — additional real repos (WanderLust,
+   WeatherOS, Connect Four AI, E-Commerce Layout, Calculator, Authentication
+   System), each hardcoded with a real description, feature list, and stack
+   pulled from the repo itself.
+3. **Everything else** — any remaining public repos, fetched live via the
+   GitHub API at runtime (GitHub doesn't allow the full repo list to be
+   scraped ahead of time, so this tier is always fresh rather than hardcoded).
 
-**Live deploy links** for the two featured cards come from `liveUrl` in
-`backend/seed.js` if you set it, or automatically from the repo's GitHub
-"Website" field (`homepage`) if you set one on GitHub itself
-(repo → Settings → add a URL under "Website"). Every other repo card shows
-a "Live ↗" link the same way, whenever GitHub reports a homepage URL.
+**Preview images**, for featured cards and every repo card, resolve in this order:
 
-## 1. Backend setup
+1. An explicit `image` set on a curated project (highest quality — see below)
+2. An auto screenshot of the live deploy URL, if one exists (via Microlink, no API key required)
+3. GitHub's own auto-generated social preview card for the repo
+
+**Live deploy links** on featured cards come from `liveUrl` in
+`backend/seed.js` if set, or automatically from the repo's GitHub "Website"
+field (`homepage`) if configured under repo → Settings. Every other repo
+card follows the same rule.
+
+## Design system
+
+- **Signature motif**: HUD corner-bracket "panels" (`.panel` in `index.css`),
+  used for every card and module — a nod to the role-based dashboards in
+  BankEase.
+- **Typography**: Space Grotesk (display) · Inter (body) · JetBrains Mono (data/labels).
+- **Palette**: graphite-navy base (`#0C1116`), amber signal (`#FFB454`), teal data accent (`#4FD8C4`).
+- Fully responsive, visible keyboard focus states, `prefers-reduced-motion` respected throughout (including the hero fade-ins and tech-stack marquee).
+
+---
+
+## Getting started
+
+### 1. Backend
 
 ```bash
 cd backend
@@ -45,18 +81,23 @@ npm install
 cp .env.example .env
 ```
 
-Edit `.env`:
-- `MONGODB_URI` — get a free cluster at mongodb.com/atlas
-- `GITHUB_USERNAME` — your GitHub username, powers the live repo feed
-- `GITHUB_TOKEN` — optional, raises the GitHub API rate limit
-- `SMTP_*` — optional, lets the contact form email you (e.g. a Gmail app password)
+Fill in `.env`:
+
+| Variable          | Required | Notes                                                        |
+| ------------------ | :------: | -------------------------------------------------------------- |
+| `MONGODB_URI`       |    ✅    | Free cluster at mongodb.com/atlas                              |
+| `GITHUB_USERNAME`   |    ✅    | Powers the live repo feed                                      |
+| `PORT`              |    —    | Defaults to `5000`                                              |
+| `CLIENT_ORIGIN`     |    —    | Frontend origin, for CORS (defaults to `http://localhost:5173`) |
+| `GITHUB_TOKEN`      |    —    | Optional — raises the GitHub API rate limit from 60/hr to 5000/hr |
+| `SMTP_*`            |    —    | Optional — lets the contact form actually email you             |
 
 ```bash
-npm run seed   # loads InterviewAI + BankEase into MongoDB
+npm run seed   # loads projects from seed.js into MongoDB
 npm run dev    # starts the API on http://localhost:5000
 ```
 
-## 2. Frontend setup
+### 2. Frontend
 
 ```bash
 cd frontend
@@ -64,38 +105,72 @@ npm install
 npm run dev    # http://localhost:5173, proxies /api to the backend
 ```
 
-Add your real resume as `frontend/public/resume.pdf` so the Resume page's
-download button works, and update `GITHUB_USERNAME` and social links in
-`frontend/src/data/profile.js`.
+Also:
 
-## 3. Deploying (matches tools already on your resume)
+- Add your resume as `frontend/public/resume.pdf` so the Resume page's download button works.
+- Update `GITHUB_USERNAME` and social links in `frontend/src/data/profile.js`.
 
-- **Backend → Render**: new Web Service, root `backend/`, build `npm install`,
-  start `npm start`. Add the same environment variables from `.env`.
-- **Frontend → Vercel**: root `frontend/`, framework preset "Vite". Set an
-  environment-based API URL if your backend isn't proxied (see note below).
-- **Database → MongoDB Atlas** free tier, whitelist `0.0.0.0/0` for Render.
+---
 
-Note: in production the frontend and backend usually live on different
-domains, so `frontend/src/api/client.js`'s `baseURL: "/api"` proxy trick
-(which only works in local dev) should be swapped for your deployed API URL,
-e.g. `baseURL: "https://your-api.onrender.com/api"`.
+## Adding content
 
-## 4. Before you launch
+The site is built so new content never requires touching component code:
 
-- [ ] Update `GITHUB_USERNAME` in both `backend/.env` and `frontend/src/data/profile.js`
-- [ ] Add real `liveUrl` / `githubUrl` values to the two projects in `backend/seed.js`, then re-run `npm run seed`
-- [ ] (Optional, best quality) Add real screenshots: drop images in `frontend/public/projects/`, then set e.g. `image: "/projects/interviewai.png"` in `backend/seed.js` and re-seed — otherwise an auto screenshot/GitHub preview is used
-- [ ] On GitHub, set the "Website" field (repo → Settings → add a URL) for any deployed repo so its live link and screenshot show up automatically
+**New project** — add an entry to the array in `backend/seed.js`, then run
+`npm run seed`. Set `featured: true` to surface it on Home and at the top of
+`/projects`; otherwise it lands in the "More builds" grid. The homepage
+project count updates automatically.
+
+**New skill** — add it to the relevant category (or a new category) in
+`frontend/src/data/profile.js`'s `skills` object. It appears on `/skills`
+immediately, and in Home's tech-stack strip, without further changes.
+
+Both pages use responsive Tailwind grids, so they reflow cleanly regardless
+of how many items you add.
+
+---
+
+## Deployment
+
+This stack deploys as three independent pieces:
+
+| Piece    | Suggested host                        |
+| -------- | -------------------------------------- |
+| Database | MongoDB Atlas (free tier)              |
+| Backend  | Render / Railway / Fly.io              |
+| Frontend | Vercel / Netlify                       |
+
+**Steps:**
+
+1. **Database** — create a free Atlas cluster, add a database user, and
+   whitelist `0.0.0.0/0` for now. Copy the connection string as your
+   production `MONGODB_URI`.
+2. **Backend** — push to GitHub, then deploy `backend/` as a Web Service
+   (build: `npm install`, start: `npm start`). Set `MONGODB_URI`,
+   `CLIENT_ORIGIN`, `GITHUB_USERNAME`, and optional vars from `.env.example`.
+3. **Seed production** — run `npm run seed` once against the production
+   database (via the host's shell, or locally with `MONGODB_URI` pointed at Atlas).
+4. **Frontend** — deploy `frontend/` (root: `frontend/`, build:
+   `npm run build`, output: `dist`). Set `VITE_API_URL` to your deployed
+   backend URL + `/api`, e.g. `https://your-backend.onrender.com/api`
+   (see `frontend/.env.example` — in local dev this is left unset and Vite's
+   proxy handles it instead).
+5. **Close the loop** — once the frontend has a live URL, set the backend's
+   `CLIENT_ORIGIN` to that exact URL and redeploy the backend so CORS allows
+   requests from the live site.
+6. **Verify** — open the live frontend, check the Network tab, and confirm
+   `/api/projects` returns 200 with real data rather than a CORS error.
+
+---
+
+## Pre-launch checklist
+
+- [ ] Set `GITHUB_USERNAME` in both `backend/.env` and `frontend/src/data/profile.js`
+- [ ] Add real `liveUrl` / `githubUrl` values in `backend/seed.js`, then re-run `npm run seed`
+- [ ] *(Optional, best quality)* Add real screenshots to `frontend/public/projects/`, reference them via `image` in `backend/seed.js`, and re-seed
+- [ ] On GitHub, set the "Website" field for any deployed repo so its live link and screenshot show up automatically
 - [ ] Drop your resume PDF into `frontend/public/resume.pdf`
 - [ ] Fill in your real LinkedIn URL in `frontend/src/data/profile.js`
-- [ ] Lock down `POST /api/projects` and `POST /api/blog` behind auth before deploying (they're open for local seeding right now)
-- [ ] Set `CLIENT_ORIGIN` in backend `.env` to your deployed frontend URL for CORS
-
-## Notes on the design
-
-- Signature motif: HUD corner-bracket "panels" (`.panel` in `index.css`) used
-  for every card/module — a nod to the role-based dashboards in BankEase.
-- Typography: Space Grotesk (display) + Inter (body) + JetBrains Mono (data/labels).
-- Palette: graphite-navy base (`#0C1116`), amber signal (`#FFB454`), teal data accent (`#4FD8C4`).
-- Fully responsive, visible keyboard focus states, and `prefers-reduced-motion` respected.
+- [ ] **Lock down `POST /api/projects` and `POST /api/blog` behind auth** before deploying — they're intentionally open right now for local seeding
+- [ ] Set `CLIENT_ORIGIN` (backend) and `VITE_API_URL` (frontend) for production
+- [ ] Fill in the real feature list for **Authentication System** in `backend/seed.js` — GitHub blocked automated README access for that repo, so its current description is inferred from the repo name only
