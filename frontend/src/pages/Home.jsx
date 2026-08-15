@@ -5,6 +5,7 @@ import StatusBar from "../components/StatusBar";
 import client from "../api/client";
 import FeaturedProjectCard from "../components/FeaturedProjectCard";
 import Loader from "../components/Loader";
+import ActivityFeed from "../components/ActivityFeed";
 
 const fallbackFeatured = [
   {
@@ -101,6 +102,11 @@ export default function Home() {
         />
       </section>
 
+      {/* LIVE ACTIVITY — real GitHub data, not decoration */}
+      <section className="mx-auto max-w-6xl px-6 pb-12">
+        <ActivityFeed />
+      </section>
+      
       {/* TECH STRIP — scrolling readout of the actual stack, not decoration */}
       <section className="border-y border-line bg-surface/60 py-4">
         <div className="group relative flex overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_10%,black_90%,transparent)]">

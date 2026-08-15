@@ -1,6 +1,8 @@
 import { Routes, Route } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import CommandPalette from "./components/CommandPalette";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Projects from "./pages/Projects";
@@ -12,9 +14,25 @@ import Resume from "./pages/Resume";
 import Contact from "./pages/Contact";
 
 export default function App() {
+  const [paletteOpen, setPaletteOpen] = useState(false);
+
+  const closePalette = useCallback(() => setPaletteOpen(false), []);
+
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      const isCombo = (e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k";
+      if (isCombo) {
+        e.preventDefault();
+        setPaletteOpen((v) => !v);
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
+
   return (
     <div className="flex min-h-screen flex-col">
-      <Navbar />
+      <Navbar onOpenPalette={() => setPaletteOpen(true)} />
       <main className="flex-1">
         <Routes>
           <Route path="/" element={<Home />} />
@@ -29,6 +47,7 @@ export default function App() {
         </Routes>
       </main>
       <Footer />
+      <CommandPalette open={paletteOpen} onClose={closePalette} />
     </div>
   );
 }
