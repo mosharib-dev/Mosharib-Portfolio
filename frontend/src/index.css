@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-base text-ink font-body antialiased;
+  background-image: radial-gradient(circle at 15% 0%, rgba(255,180,84,0.06), transparent 40%),
+                     radial-gradient(circle at 85% 20%, rgba(79,216,196,0.05), transparent 40%);
+}
+
+::selection {
+  background: #FFB454;
+  color: #0C1116;
+}
+
+/* Visible keyboard focus everywhere */
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
+  outline: 2px solid #FFB454;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* HUD corner-bracket panel — the site's signature motif */
+.panel {
+  position: relative;
+  @apply bg-surface border border-line;
+}
+.panel::before, .panel::after,
+.panel-br-tl::before, .panel-br-br::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-color: #FFB454;
+  opacity: 0.7;
+}
+.panel::before {
+  top: -1px; left: -1px;
+  border-top: 2px solid;
+  border-left: 2px solid;
+}
+.panel::after {
+  bottom: -1px; right: -1px;
+  border-bottom: 2px solid;
+  border-right: 2px solid;
+}
+
+.eyebrow {
+  @apply font-mono text-xs tracking-[0.2em] uppercase text-signal;
+}
+
+.readout {
+  @apply font-mono text-xs text-muted;
+}
