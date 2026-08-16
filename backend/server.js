@@ -6,6 +6,7 @@ import projectRoutes from "./routes/projects.js";
 import blogRoutes from "./routes/blog.js";
 import contactRoutes from "./routes/contact.js";
 import githubRoutes from "./routes/github.js";
+import authRoutes from "./routes/auth.js";
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ app.use("/api/projects", projectRoutes);
 app.use("/api/blog", blogRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/github", githubRoutes);
+app.use("/api/auth", authRoutes);
 
 app.use((req, res) => res.status(404).json({ error: "Not found" }));
 

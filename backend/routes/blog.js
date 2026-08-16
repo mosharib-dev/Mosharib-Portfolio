@@ -1,5 +1,6 @@
 import { Router } from "express";
 import BlogPost from "../models/BlogPost.js";
+import requireAuth from "../middleware/requireAuth.js";
 
 const router = Router();
 
@@ -22,7 +23,7 @@ router.get("/:slug", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", requireAuth, async (req, res) => {
   try {
     const post = await BlogPost.create(req.body);
     res.status(201).json(post);

@@ -13,6 +13,7 @@ import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import Resume from "./pages/Resume";
 import Contact from "./pages/Contact";
+import Admin from "./pages/Admin";
 
 export default function App() {
   const [paletteOpen, setPaletteOpen] = useState(false);
@@ -48,6 +49,7 @@ export default function App() {
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/resume" element={<Resume />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/admin" element={<Admin />} />
           </Routes>
         </div>
       </main>

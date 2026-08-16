@@ -1,5 +1,6 @@
 import { Router } from "express";
 import Project from "../models/Project.js";
+import requireAuth from "../middleware/requireAuth.js";
 
 const router = Router();
 
@@ -24,8 +25,8 @@ router.get("/:slug", async (req, res) => {
   }
 });
 
-// POST /api/projects  (protect this behind auth before going live)
-router.post("/", async (req, res) => {
+// POST /api/projects  (requires admin login — see middleware/requireAuth.js)
+router.post("/", requireAuth, async (req, res) => {
   try {
     const project = await Project.create(req.body);
     res.status(201).json(project);
