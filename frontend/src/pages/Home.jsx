@@ -4,8 +4,8 @@ import { profile, skills } from "../data/profile";
 import StatusBar from "../components/StatusBar";
 import client from "../api/client";
 import FeaturedProjectCard from "../components/FeaturedProjectCard";
-import Loader from "../components/Loader";
 import ActivityFeed from "../components/ActivityFeed";
+import Loader from "../components/Loader";
 
 const fallbackFeatured = [
   {
@@ -20,6 +20,16 @@ const fallbackFeatured = [
       "Puppeteer-based automated PDF generation for tailored resumes and reports",
       "Secure JWT authentication with protected routes",
     ],
+    caseStudy: {
+      problem:
+        "Generic interview prep treats every candidate the same. Someone prepping for a frontend role at a startup needs different questions than someone prepping for a backend role at an enterprise — most tools ignore that entirely.",
+      approach:
+        "Built a pipeline that takes a resume and a specific job description as input, sends both to the Gemini API with a structured prompt, and parses the response into a typed report: match score, skill gaps, and question sets split into technical and behavioral. Puppeteer then renders that report into a downloadable PDF server-side.",
+      tradeoffs:
+        "Chose Puppeteer over a lighter library like PDFKit because the report needed real CSS layout — that cost more memory per request, so PDF generation runs as a queued job rather than synchronously on upload.",
+      result:
+        "A working end-to-end flow from upload to downloadable, tailored report, with JWT-protected routes so reports are private to the account that generated them.",
+    },
     githubUrl: "https://github.com/mosharib-dev/AI-Interview-Preparation",
     status: "live",
     order: 1,
@@ -36,30 +46,44 @@ const fallbackFeatured = [
       "4 role-based dashboards with a multi-level freeze-request approval chain",
       "Generates printable loan letters, statements, and audit logs",
     ],
+    caseStudy: {
+      problem:
+        "A single admin role for a banking system is a liability — a cashier processing withdrawals shouldn't have the same permissions as a manager approving a loan freeze.",
+      approach:
+        "Modeled four distinct roles (Manager, Account Creator, Cashier, Updater), each with a scoped dashboard and permission set. Freeze requests route through a multi-level approval chain rather than a single approve/deny toggle. EMI deductions run on node-cron, with a startup-recovery check so a server restart doesn't silently skip a due payment.",
+      tradeoffs:
+        "Used EJS server-rendered views instead of a separate SPA frontend to keep the auth/session model simple for a role-based system where every page needs a permission check.",
+      result:
+        "Four working role-based dashboards with a functioning approval chain and self-healing scheduled job, seeded and testable with realistic demo data.",
+    },
     githubUrl: "https://github.com/mosharib-dev/BankEase---Multi-Role-Bank-Management-System",
     status: "live",
     order: 2,
   },
 ];
 
-// Flattened, deduped list for the tech strip — pulled straight from the
-// real skills data so it never drifts out of sync.
 const techStrip = [...new Set(Object.values(skills).flat())];
 
 export default function Home() {
   const [featured, setFeatured] = useState(null);
+  const [projectCount, setProjectCount] = useState(null);
 
   useEffect(() => {
     client
       .get("/projects")
-      .then((res) => setFeatured(res.data.filter((p) => p.featured).slice(0, 2)))
-      .catch(() => setFeatured(fallbackFeatured));
+      .then((res) => {
+        setFeatured(res.data.filter((p) => p.featured).slice(0, 2));
+        setProjectCount(res.data.length);
+      })
+      .catch(() => {
+        setFeatured(fallbackFeatured);
+        setProjectCount(null);
+      });
   }, []);
 
   return (
     <div>
-      {/* HERO — boot-sequence framing */}
-      <section className="relative overflow-hidden border-b border-line bg-grid">
+      <section className="relative overflow-hidden border-b border-line bg-grid bg-grid">
         <div className="mx-auto max-w-6xl px-6 py-24 sm:py-32">
           <p className="eyebrow animate-fade-in-up flex items-center gap-2">
             init --profile=mohammad-mosharib
@@ -90,24 +114,21 @@ export default function Home() {
         </div>
       </section>
 
-      {/* STATUS BAR — signature readout */}
       <section className="mx-auto max-w-6xl px-6 py-12">
         <StatusBar
           stats={[
             { label: "CGPA", value: "8.99", unit: "/10" },
             { label: "DSA SOLVED", value: "100+" },
-            { label: "PROJECTS SHIPPED", value: "8" },
+            { label: "PROJECTS SHIPPED", value: projectCount ? `${projectCount}` : "8" },
             { label: "FULL-STACK APPS LIVE", value: "3" },
           ]}
         />
       </section>
 
-      {/* LIVE ACTIVITY — real GitHub data, not decoration */}
       <section className="mx-auto max-w-6xl px-6 pb-12">
         <ActivityFeed />
       </section>
-      
-      {/* TECH STRIP — scrolling readout of the actual stack, not decoration */}
+
       <section className="border-y border-line bg-surface/60 py-4">
         <div className="group relative flex overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_10%,black_90%,transparent)]">
           <div className="flex shrink-0 animate-marquee items-center gap-8 pr-8 group-hover:[animation-play-state:paused]">
@@ -120,7 +141,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* FEATURED PROJECTS */}
       <section className="mx-auto max-w-6xl px-6 py-16">
         <div className="mb-8 flex items-end justify-between">
           <div>

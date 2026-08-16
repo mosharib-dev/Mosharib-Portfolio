@@ -1,4 +1,5 @@
 import SectionHeading from "../components/SectionHeading";
+import ContributionHeatmap from "../components/ContributionHeatmap";
 import { profile, education, experience, achievements } from "../data/profile";
 
 export default function About() {
@@ -29,6 +30,13 @@ export default function About() {
                 </ul>
               </div>
             ))}
+          </div>
+
+          <div className="mt-10 panel p-6">
+            <p className="eyebrow">GitHub activity</p>
+            <div className="mt-4">
+              <ContributionHeatmap />
+            </div>
           </div>
         </div>
 

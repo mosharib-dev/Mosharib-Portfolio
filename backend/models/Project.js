@@ -8,6 +8,12 @@ const projectSchema = new mongoose.Schema(
     description: { type: String, required: true },
     stack: [{ type: String }],
     highlights: [{ type: String }],
+    caseStudy: {
+      problem: String,
+      approach: String,
+      tradeoffs: String,
+      result: String,
+    },
     liveUrl: String,
     githubUrl: String,
     repoName: String, // exact GitHub repo name, for matching against the live API when it differs from slug

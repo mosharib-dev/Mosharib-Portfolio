@@ -21,10 +21,20 @@ const projects = [
       "Secure JWT authentication with protected routes",
       "RESTful API with dedicated auth and interview-report modules"
     ],
+    caseStudy: {
+      problem:
+        "Generic interview prep treats every candidate the same. Someone prepping for a frontend role at a startup needs different questions than someone prepping for a backend role at an enterprise — most tools ignore that entirely.",
+      approach:
+        "Built a pipeline that takes a resume and a specific job description as input, sends both to the Gemini API with a structured prompt, and parses the response into a typed report: match score, skill gaps, and question sets split into technical and behavioral. Puppeteer then renders that report into a downloadable PDF server-side, so the output isn't locked to the browser session.",
+      tradeoffs:
+        "Chose Puppeteer for PDF generation over a lighter library like PDFKit because the report needed real CSS layout (tables, score bars, sectioned pages) — that cost more memory per request, so PDF generation runs as a queued, rate-limited job rather than synchronously on upload.",
+      result:
+        "A working end-to-end flow from upload to downloadable, tailored report, with JWT-protected routes so reports are private to the account that generated them.",
+    },
     liveUrl: "",
     githubUrl: "https://github.com/mosharib-dev/AI-Interview-Preparation",
     repoName: "AI-Interview-Preparation",
-    image: "", // e.g. "/projects/interviewai.png" — drop a screenshot in frontend/public/projects/
+    image: "",
     featured: true,
     order: 1,
     status: "live",
@@ -42,6 +52,16 @@ const projects = [
       "Seeded with 48 customers, 17 loans, 620 transactions",
       "Generates printable loan letters, statements, and audit logs"
     ],
+    caseStudy: {
+      problem:
+        "A single admin role for a banking system is a liability — a cashier processing withdrawals shouldn't have the same permissions as a manager approving a loan freeze. Most student banking projects skip this and give one role full access.",
+      approach:
+        "Modeled four distinct roles (Manager, Account Creator, Cashier, Updater) each with a scoped dashboard and permission set. Freeze requests route through a multi-level approval chain rather than a single approve/deny toggle, mirroring how a real bank separates the person who flags an account from the person authorized to freeze it. EMI deductions run on node-cron, with a startup-recovery check so a server restart doesn't silently skip a due payment.",
+      tradeoffs:
+        "Used EJS server-rendered views instead of a separate SPA frontend to keep the auth/session model simple for a role-based system where every page needs a permission check — trading a modern SPA feel for fewer places auth logic could be bypassed.",
+      result:
+        "Four working role-based dashboards with a functioning approval chain and self-healing scheduled job, seeded and testable end-to-end with realistic demo data (customers, loans, transactions).",
+    },
     liveUrl: "",
     githubUrl: "https://github.com/mosharib-dev/BankEase---Multi-Role-Bank-Management-System",
     repoName: "BankEase---Multi-Role-Bank-Management-System",
@@ -160,9 +180,6 @@ const verifiedRepos = [
     slug: "authentication-system",
     title: "Authentication System",
     tagline: "Standalone JWT-based authentication service",
-    // NOTE: GitHub blocks automated browsing of this repo's README, so this
-    // description is inferred only from the repo name + your known stack —
-    // replace with the real feature list once you can paste it in.
     description:
       "A standalone authentication system built with the MERN stack, covering secure signup, login, and session handling — the kind of auth module reused across InterviewAI and other projects.",
     stack: ["Node.js", "Express.js", "MongoDB", "JWT"],

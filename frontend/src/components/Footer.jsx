@@ -1,4 +1,5 @@
 import { profile } from "../data/profile";
+import SystemStatus from "./SystemStatus";
 
 export default function Footer() {
   return (
@@ -7,10 +8,12 @@ export default function Footer() {
         <p className="readout">
           © {new Date().getFullYear()} {profile.name} · built with React, Express & MongoDB
         </p>
-        <div className="flex gap-5 font-mono text-xs uppercase tracking-wider">
+        <div className="flex flex-wrap items-center gap-5 font-mono text-xs uppercase tracking-wider">
           <a href={profile.github} className="hover:text-signal">GitHub</a>
           <a href={profile.linkedin} className="hover:text-signal">LinkedIn</a>
           <a href={`mailto:${profile.email}`} className="hover:text-signal">Email</a>
+          <span className="hidden h-4 w-px bg-line sm:inline-block" />
+          <SystemStatus />
         </div>
       </div>
     </footer>

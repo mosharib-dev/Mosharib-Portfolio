@@ -17,7 +17,6 @@ body {
   color: #0C1116;
 }
 
-/* Visible keyboard focus everywhere */
 a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
   outline: 2px solid #FFB454;
   outline-offset: 2px;
@@ -36,6 +35,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .panel {
   position: relative;
   @apply bg-surface border border-line;
+  --mx: -1000px;
+  --my: -1000px;
+  background-image: radial-gradient(420px circle at var(--mx) var(--my), rgba(255, 180, 84, 0.09), transparent 60%);
 }
 .panel::before, .panel::after,
 .panel-br-tl::before, .panel-br-br::after {

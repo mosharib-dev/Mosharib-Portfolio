@@ -12,8 +12,6 @@ const staticPages = [
   { label: "Contact", to: "/contact", hint: "page" },
 ];
 
-// Cheap fuzzy-ish scorer: rewards substring matches, and in-order
-// (but non-contiguous) character matches, so "bnk" still finds "BankEase".
 function score(query, target) {
   const q = query.toLowerCase();
   const t = target.toLowerCase();

@@ -17,8 +17,6 @@ function timeAgo(iso) {
   return "just now";
 }
 
-// Live diagnostics panel — real recent GitHub activity, not decoration.
-// Styled like a terminal window to match the console identity.
 export default function ActivityFeed() {
   const [state, setState] = useState({ loading: true, error: false, events: [] });
 
