@@ -47,17 +47,52 @@ export const experience = [
 export const skills = {
   Languages: ["Java", "JavaScript", "C", "C++", "HTML5", "CSS3"],
   "Frameworks & Libraries": ["Node.js", "Express.js", "React.js", "Bootstrap 5", "Tailwind CSS", "EJS"],
-  Databases: ["MongoDB", "MongoDB Atlas", "Mongoose ODM","PostgreSQL","Prism ORM"],
-  "Tools & Platforms": ["Git", "GitHub", "VS Code", "Render", "Hoppscotch","Postman","Vercel"],
+  Databases: ["MongoDB", "MongoDB Atlas", "Mongoose ODM"],
+  "Tools & Platforms": ["Git", "GitHub", "VS Code", "Render", "Hoppscotch", "Vercel"],
   "Core CS": ["Data Structures & Algorithms", "OOP", "Operating Systems", "DBMS", "Computer Networks"],
 };
 
 export const achievements = [
   "Branch Rank 1 from Semester 1 — University Rank 1 in branch during Semester 4",
   "1st Rank, College Coding Contest — organized by the College Coding Club",
-  "Cisco Networking Academy: Cybersecurity Essentials, Python Essentials, C++ Essentials",
-  "Advanced C++ Training — Spoken Tutorial Project, IIT Bombay",
-  "Introduction to Computers — Spoken Tutorial Project, IIT Bombay",
   "100+ DSA problems solved across LeetCode, GFG, CodeChef, and HackerRank",
   "Scholarship for Academic Excellence, 12th grade",
+];
+
+export const certifications = [
+  {
+    title: "Cybersecurity Essentials",
+    issuer: "Cisco Networking Academy",
+  },
+  {
+    title: "Python Essentials",
+    issuer: "Cisco Networking Academy",
+  },
+  {
+    title: "C++ Essentials",
+    issuer: "Cisco Networking Academy",
+  },
+  {
+    title: "Advanced C++ Training",
+    issuer: "Spoken Tutorial Project, IIT Bombay",
+  },
+  {
+    title: "Introduction to Computers",
+    issuer: "Spoken Tutorial Project, IIT Bombay",
+  },
+];
+
+// "Right now" — a live-feeling status block, kept short and honest.
+// Update this by hand whenever what you're doing actually changes.
+export const currentStatus = {
+  building: "This portfolio's admin dashboard and diagnostics panels",
+  learning: "Angular and PostgreSQL",
+  availability: "Open to internships and full-time roles",
+};
+
+export const quickFacts = [
+  { label: "Location", value: "Bihar, India" },
+  { label: "Response time", value: "Usually within 24h" },
+  { label: "Availability", value: "Internships · Full-time" },
+  { label: "Languages", value: "English, Hindi" },
 ];
