@@ -2,6 +2,7 @@ import { useState } from "react";
 import SectionHeading from "../components/SectionHeading";
 import { profile } from "../data/profile";
 import client from "../api/client";
+import ContactCard from "../components/ContactCard";
 
 export default function Contact() {
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
@@ -78,6 +79,9 @@ export default function Contact() {
         Or reach me directly: <a href={`mailto:${profile.email}`} className="text-signal hover:underline">{profile.email}</a>
         {" · "}{profile.phone}
       </p>
+      <div className="mt-8">
+        <ContactCard />
+      </div>
     </div>
   );
 }

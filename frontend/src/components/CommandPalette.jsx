@@ -10,6 +10,7 @@ const staticPages = [
   { label: "Blog", to: "/blog", hint: "page" },
   { label: "Resume", to: "/resume", hint: "page" },
   { label: "Contact", to: "/contact", hint: "page" },
+  { label: "How this site is built", to: "/architecture", hint: "page" },
 ];
 
 function score(query, target) {

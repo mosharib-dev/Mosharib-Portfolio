@@ -9,6 +9,7 @@ import {
   currentStatus,
   quickFacts,
 } from "../data/profile";
+import LeetCodeActivity from "../components/LeetCodeActivity";
 
 export default function About() {
   return (
@@ -89,6 +90,13 @@ export default function About() {
             <p className="eyebrow">GitHub activity</p>
             <div className="mt-4">
               <ContributionHeatmap />
+            </div>
+          </div>
+
+          <div className="mt-6 panel p-6">
+            <p className="eyebrow">LeetCode activity</p>
+            <div className="mt-4">
+              <LeetCodeActivity />
             </div>
           </div>
         </div>

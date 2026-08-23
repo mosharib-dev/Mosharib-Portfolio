@@ -7,7 +7,10 @@ export default function Footer() {
     <footer className="border-t border-line">
       <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-10 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
         <p className="readout">
-          © {new Date().getFullYear()} {profile.name} · built with React, Express & MongoDB
+          © {new Date().getFullYear()} {profile.name} ·{" "}
+          <Link to="/architecture" className="hover:text-signal">
+            built with React, Express & MongoDB
+          </Link>
         </p>
         <div className="flex flex-wrap items-center gap-5 font-mono text-xs uppercase tracking-wider">
           <a href={profile.github} className="hover:text-signal">GitHub</a>

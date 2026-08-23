@@ -6,6 +6,7 @@ import client from "../api/client";
 import FeaturedProjectCard from "../components/FeaturedProjectCard";
 import ActivityFeed from "../components/ActivityFeed";
 import Loader from "../components/Loader";
+import GithubStatsStrip from "../components/GithubStatsStrip";
 
 const fallbackFeatured = [
   {
@@ -128,6 +129,10 @@ export default function Home() {
       <section className="mx-auto max-w-6xl px-6 pb-12">
         <ActivityFeed />
       </section>
+
+      <div className="mt-6">
+        <GithubStatsStrip />
+      </div>
 
       <section className="border-y border-line bg-surface/60 py-4">
         <div className="group relative flex overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_10%,black_90%,transparent)]">

@@ -14,6 +14,8 @@ import BlogPost from "./pages/BlogPost";
 import Resume from "./pages/Resume";
 import Contact from "./pages/Contact";
 import Admin from "./pages/Admin";
+import Architecture from "./pages/Architecture";
+import NotFound from "./pages/NotFound";
 
 export default function App() {
   const [paletteOpen, setPaletteOpen] = useState(false);
@@ -50,6 +52,8 @@ export default function App() {
             <Route path="/resume" element={<Resume />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/architecture" element={<Architecture />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
       </main>

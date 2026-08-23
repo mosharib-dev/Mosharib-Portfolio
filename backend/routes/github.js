@@ -9,6 +9,7 @@ const CACHE_TTL = 1000 * 60 * 15; // 15 minutes
 let activityCache = { data: null, ts: 0 };
 let contributionsCache = { data: null, ts: 0 };
 const CONTRIB_CACHE_TTL = 1000 * 60 * 60 * 6; // 6 hours — this data changes slowly
+let statsCache = { data: null, ts: 0 };
 
 router.get("/repos", async (req, res) => {
   const username = process.env.GITHUB_USERNAME;
@@ -161,6 +162,58 @@ router.get("/contributions", async (req, res) => {
     };
 
     contributionsCache = { data: result, ts: Date.now() };
+    res.json(result);
+  } catch (err) {
+    res.status(502).json({ error: "Could not reach GitHub", detail: err.message });
+  }
+});
+
+
+// (add just before "export default router;" at the bottom)
+// GET /api/github/aggregate-stats — total stars + public repo count + account
+// age, computed from the GitHub user endpoint + the same repo list /repos
+// already fetches (reusing that cache instead of hitting the API twice).
+router.get("/aggregate-stats", async (req, res) => {
+  const username = process.env.GITHUB_USERNAME;
+  if (!username) return res.status(400).json({ error: "GITHUB_USERNAME not configured" });
+
+  if (statsCache.data && Date.now() - statsCache.ts < CACHE_TTL) {
+    return res.json(statsCache.data);
+  }
+
+  try {
+    const headers = { Accept: "application/vnd.github+json" };
+    if (process.env.GITHUB_TOKEN) headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
+
+    const [userRes, repos] = await Promise.all([
+      fetch(`https://api.github.com/users/${username}`, { headers }).then((r) => {
+        if (!r.ok) throw new Error(`GitHub user API responded ${r.status}`);
+        return r.json();
+      }),
+      cache.data && Date.now() - cache.ts < CACHE_TTL
+        ? Promise.resolve(cache.data)
+        : fetch(`https://api.github.com/users/${username}/repos?per_page=100`, { headers }).then((r) => {
+            if (!r.ok) throw new Error(`GitHub repos API responded ${r.status}`);
+            return r.json();
+          }),
+    ]);
+
+    const totalStars = (Array.isArray(repos) ? repos : []).reduce(
+      (sum, r) => sum + (r.stargazers_count || 0),
+      0
+    );
+    const accountAgeYears = Math.floor(
+      (Date.now() - new Date(userRes.created_at).getTime()) / (1000 * 60 * 60 * 24 * 365)
+    );
+
+    const result = {
+      publicRepos: userRes.public_repos,
+      totalStars,
+      followers: userRes.followers,
+      accountAgeYears,
+    };
+
+    statsCache = { data: result, ts: Date.now() };
     res.json(result);
   } catch (err) {
     res.status(502).json({ error: "Could not reach GitHub", detail: err.message });
